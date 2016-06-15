@@ -1,0 +1,17 @@
+package mapper;
+
+import com.bwie.entity.Human;
+
+public interface HumanMapper {
+    int deleteByPrimaryKey(Integer humanId);
+
+    int insert(Human record);
+
+    int insertSelective(Human record);
+
+    Human selectByPrimaryKey(Integer humanId);
+
+    int updateByPrimaryKeySelective(Human record);
+
+    int updateByPrimaryKey(Human record);
+}

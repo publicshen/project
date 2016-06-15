@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mapper.HumanMapper" >
+  <resultMap id="BaseResultMap" type="com.bwie.entity.Human" >
+    <id column="human_id" property="humanId" jdbcType="INTEGER" />
+    <result column="human_name" property="humanName" jdbcType="VARCHAR" />
+    <result column="human_tel" property="humanTel" jdbcType="VARCHAR" />
+    <result column="human_arriveTime" property="humanArrivetime" jdbcType="VARCHAR" />
+    <result column="human_Idcard" property="humanIdcard" jdbcType="VARCHAR" />
+    <result column="human_moneyType" property="humanMoneytype" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="days" property="days" jdbcType="INTEGER" />
+    <result column="room_id" property="roomId" jdbcType="VARCHAR"/>
+    <result column="account_id" property="accountId" jdbcType="VARCHAR"/>
+    
+    <collection property="account" ofType="com.bwie.entity.Account">
+    	<id column="id" property="id"/>
+    	<result column="balance" property="balance"/>
+    </collection>
+    
+    <collection property="room" ofType="com.bwie.entity.Room">
+    	<id column="room_id" property="roomId"/>
+    	<result column="room_name" property="roomName"/>
+    	<result column="roomStatus_id" property="roomstatusId"/>
+    	<result column="roomType_id" property="roomtypeId"/>
+    	
+    	<association property="status" javaType="com.bwie.entity.Status">
+    		<id column="roomStatus_id" property="roomstatusId"/>
+    		<result column="roomStatus_status" property="roomstatusStatus"/>
+    	</association>
+    	
+    	<association property="roomtype" javaType="com.bwie.entity.RoomType">
+    		<id column="roomType_id" property="roomtypeId"/>
+    		<result column="roomType_name" property="roomtypeName"/>
+    		<result column="roomPrice" property="roomprice"/>
+    	</association>
+    </collection>
+    
+  </resultMap>
+
+  
+  <select id="getHumanList" resultMap="BaseResultMap" parameterType="com.bwie.entity.Page" >
+		select * from human t1 left join account t2 on t1.account_id = t2.id
+		left join room t3 on t1.room_id=t3.room_id 
+		left join status t4 on t3.roomStatus_id = t4.roomStatus_id
+		left join roomtype t5 on t3.roomType_id = t5.roomType_id
+		 limit #{page},#{pageSize}
+		
+  </select>
+  
+ 	<select id="listCount" resultType="int">
+		select count(*) from human 
+		
+  </select>
+ 
+    <delete id="deleteHuman" parameterType="java.lang.Integer" >
+    delete from human
+    where human_id = #{humanId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insertHuman" parameterType="com.bwie.entity.Human" >
+    	insert into human(human_name,human_tel,human_arriveTime,human_Idcard,human_moneyType,sex,days) values(#{humanName},#{humanTel},#{humanArrivetime},#{humanIdcard},#{humanMoneytype},#{sex},#{days})
+   </insert>
+  
+  	<select id="getById" resultMap="BaseResultMap">
+  		select * from human where human_id = #{humanId}
+  	</select>
+  
+  <update id="updateHuman" parameterType="com.bwie.entity.Human">
+  		 update human set human_name=#{humanName},human_tel=#{humanTel},human_arriveTime=#{humanArrivetime},human_Idcard=#{humanIdcard},human_moneyType=#{humanMoneytype},sex=#{sex},days=#{days} where human_id = #{humanId} 
+ 
+  </update>
+  
+  
+ <!-- <sql id="Base_Column_List" >
+    human_id, human_name, human_tel, human_arriveTime, human_Idcard, human_moneyType, 
+    sex, days
+  </sql>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from human
+    where human_id = #{humanId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bwie.entity.Human" >
+    insert into human (human_id, human_name, human_tel, 
+      human_arriveTime, human_Idcard, human_moneyType, 
+      sex, days)
+    values (#{humanId,jdbcType=INTEGER}, #{humanName,jdbcType=VARCHAR}, #{humanTel,jdbcType=VARCHAR}, 
+      #{humanArrivetime,jdbcType=VARCHAR}, #{humanIdcard,jdbcType=VARCHAR}, #{humanMoneytype,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{days,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bwie.entity.Human" >
+    insert into human
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="humanId != null" >
+        human_id,
+      </if>
+      <if test="humanName != null" >
+        human_name,
+      </if>
+      <if test="humanTel != null" >
+        human_tel,
+      </if>
+      <if test="humanArrivetime != null" >
+        human_arriveTime,
+      </if>
+      <if test="humanIdcard != null" >
+        human_Idcard,
+      </if>
+      <if test="humanMoneytype != null" >
+        human_moneyType,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="days != null" >
+        days,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="humanId != null" >
+        #{humanId,jdbcType=INTEGER},
+      </if>
+      <if test="humanName != null" >
+        #{humanName,jdbcType=VARCHAR},
+      </if>
+      <if test="humanTel != null" >
+        #{humanTel,jdbcType=VARCHAR},
+      </if>
+      <if test="humanArrivetime != null" >
+        #{humanArrivetime,jdbcType=VARCHAR},
+      </if>
+      <if test="humanIdcard != null" >
+        #{humanIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="humanMoneytype != null" >
+        #{humanMoneytype,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="days != null" >
+        #{days,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bwie.entity.Human" >
+    update human
+    <set >
+      <if test="humanName != null" >
+        human_name = #{humanName,jdbcType=VARCHAR},
+      </if>
+      <if test="humanTel != null" >
+        human_tel = #{humanTel,jdbcType=VARCHAR},
+      </if>
+      <if test="humanArrivetime != null" >
+        human_arriveTime = #{humanArrivetime,jdbcType=VARCHAR},
+      </if>
+      <if test="humanIdcard != null" >
+        human_Idcard = #{humanIdcard,jdbcType=VARCHAR},
+      </if>
+      <if test="humanMoneytype != null" >
+        human_moneyType = #{humanMoneytype,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="days != null" >
+        days = #{days,jdbcType=INTEGER},
+      </if>
+    </set>
+    where human_id = #{humanId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bwie.entity.Human" >
+    update human
+    set human_name = #{humanName,jdbcType=VARCHAR},
+      human_tel = #{humanTel,jdbcType=VARCHAR},
+      human_arriveTime = #{humanArrivetime,jdbcType=VARCHAR},
+      human_Idcard = #{humanIdcard,jdbcType=VARCHAR},
+      human_moneyType = #{humanMoneytype,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      days = #{days,jdbcType=INTEGER}
+    where human_id = #{humanId,jdbcType=INTEGER}
+  </update>  -->
+</mapper>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"  
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+xmlns:aop="http://www.springframework.org/schema/aop"   
+xmlns:context="http://www.springframework.org/schema/context"  
+xmlns:jee="http://www.springframework.org/schema/jee"  
+xmlns:lang="http://www.springframework.org/schema/lang"  
+xmlns:util="http://www.springframework.org/schema/util"  
+xmlns:tx="http://www.springframework.org/schema/tx"  
+xmlns:mvc="http://www.springframework.org/schema/mvc"    
+xsi:schemaLocation="http://www.springframework.org/schema/beans  
+
+ http://www.springframework.org/schema/beans/spring-beans.xsd   
+ http://www.springframework.org/schema/aop    
+ http://www.springframework.org/schema/aop/spring-aop.xsd   
+ http://www.springframework.org/schema/jee    
+ http://www.springframework.org/schema/jee/spring-jee.xsd   
+ http://www.springframework.org/schema/lang    
+ http://www.springframework.org/schema/lang/spring-lang.xsd   
+ http://www.springframework.org/schema/context    
+ http://www.springframework.org/schema/context/spring-context.xsd   
+ http://www.springframework.org/schema/tx    
+ http://www.springframework.org/schema/tx/spring-tx.xsd   
+ http://www.springframework.org/schema/util    
+ http://www.springframework.org/schema/util/spring-util.xsd   
+ http://www.springframework.org/schema/mvc    
+ http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+ 
+ <context:component-scan base-package="com.bwie" />
+ 
+ <!-- 获取数据源，链接数据库 -->
+ <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">
+ 	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+ 	<property name="url" value="jdbc:mysql://169.254.125.45/hotel"></property>
+ 	<property name="username" value="szq"></property>
+ 	<property name="password" value="123"></property>
+ 	                <!-- 初始化连接大小 -->
+        <property name="initialSize" value="0" ></property>
+        <!-- 连接池最大使用连接数量 -->
+        <property name="maxActive" value="20" ></property>
+        <!-- 连接池最大空闲 -->
+        <property name="maxIdle" value="20" ></property>
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="0" ></property>
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="60000" ></property>
+ </bean>
+ 
+ <!-- 建立sqlSessFactory -->
+ <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+ 	<property name="dataSource" ref="dataSource"></property>
+ 	<property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+ </bean>
+ 
+ <!-- 扫描mapper下的文件 ，，得到mapper指令 -->
+ <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+ 	<property name="basePackage" value="mapper"></property>
+ </bean>
+ </beans>

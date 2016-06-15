@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mapper.RoomMapper" >
+  <resultMap id="BaseResultMap" type="com.bwie.entity.Room" >
+    <id column="room_id" property="roomId" jdbcType="INTEGER" />
+    <result column="roomStatus_id" property="roomstatusId" jdbcType="INTEGER" />
+    <result column="roomType_id" property="roomtypeId" jdbcType="INTEGER" />
+    <result column="room_name" property="roomName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    room_id, roomStatus_id, roomType_id, room_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from room
+    where room_id = #{roomId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from room
+    where room_id = #{roomId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bwie.entity.Room" >
+    insert into room (room_id, roomStatus_id, roomType_id, 
+      room_name)
+    values (#{roomId,jdbcType=INTEGER}, #{roomstatusId,jdbcType=INTEGER}, #{roomtypeId,jdbcType=INTEGER}, 
+      #{roomName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bwie.entity.Room" >
+    insert into room
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roomId != null" >
+        room_id,
+      </if>
+      <if test="roomstatusId != null" >
+        roomStatus_id,
+      </if>
+      <if test="roomtypeId != null" >
+        roomType_id,
+      </if>
+      <if test="roomName != null" >
+        room_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roomId != null" >
+        #{roomId,jdbcType=INTEGER},
+      </if>
+      <if test="roomstatusId != null" >
+        #{roomstatusId,jdbcType=INTEGER},
+      </if>
+      <if test="roomtypeId != null" >
+        #{roomtypeId,jdbcType=INTEGER},
+      </if>
+      <if test="roomName != null" >
+        #{roomName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bwie.entity.Room" >
+    update room
+    <set >
+      <if test="roomstatusId != null" >
+        roomStatus_id = #{roomstatusId,jdbcType=INTEGER},
+      </if>
+      <if test="roomtypeId != null" >
+        roomType_id = #{roomtypeId,jdbcType=INTEGER},
+      </if>
+      <if test="roomName != null" >
+        room_name = #{roomName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where room_id = #{roomId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bwie.entity.Room" >
+    update room
+    set roomStatus_id = #{roomstatusId,jdbcType=INTEGER},
+      roomType_id = #{roomtypeId,jdbcType=INTEGER},
+      room_name = #{roomName,jdbcType=VARCHAR}
+    where room_id = #{roomId,jdbcType=INTEGER}
+  </update>
+</mapper>

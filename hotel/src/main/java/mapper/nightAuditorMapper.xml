@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mapper.NightAuditorMapper" >
+
+	<resultMap type="com.bwie.entity.Human" id="BaseHumanResultMap">
+		<id column="human_id" property="humanId" jdbcType="INTEGER" />
+<!-- 		<result column="human_name" property="humanName" jdbcType="VARCHAR" /> -->
+<!-- 		<result column="human_tel" property="humanTel" jdbcType="VARCHAR" /> -->
+<!-- 		<result column="human_arriveTime" property="humanArrivetime" jdbcType="VARCHAR" /> -->
+<!-- 		<result column="human_Idcard" property="humanIdcard" jdbcType="VARCHAR" /> -->
+<!-- 		<result column="human_moneyType" property="humanMoneytype" jdbcType="VARCHAR" /> -->
+<!-- 		<result column="sex" property="sex" jdbcType="VARCHAR" /> -->
+<!-- 		<result column="days" property="days" jdbcType="INTEGER" /> -->
+<!-- 		<result column="room_id" property="roomId" jdbcType="VARCHAR"/> -->
+<!-- 		<result column="account_id" property="accountId" jdbcType="VARCHAR"/> -->
+	</resultMap>
+	
+	<resultMap type="com.bwie.entity.Human" id="PriceAndBalanceResultMap" extends="BaseHumanResultMap" >
+		<association property="room" javaType="com.bwie.entity.Room" >
+			<association property="roomtype" javaType="com.bwie.entity.RoomType" >
+				<id column="roomType_id" property="roomtypeId" />
+				<result column="roomPrice" property="roomprice" />
+			</association>
+		</association>
+
+		<association property="account" javaType="com.bwie.entity.Account" >
+			<id column="id" property="id" />
+			<result column="id" property="id" />
+			<result column="balance" property="balance" />
+		</association>
+	</resultMap>
+
+	<select id="findPriceAndBalance" resultMap="PriceAndBalanceResultMap" >
+		SELECT DISTINCT
+			h.human_id,
+			rt.roomType_id,
+			rt.roomPrice,
+			a.id,
+			a.balance
+		FROM
+			human AS h
+		LEFT JOIN room AS r ON h.room_id = h.human_id
+		LEFT JOIN roomtype AS rt ON h.room_id = rt.roomType_id
+		LEFT JOIN account AS a ON h.account_id = a.id
+		WHERE rt.roomType_id IS NOT NULL
+	</select>
+	
+</mapper>
